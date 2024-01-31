@@ -1,5 +1,12 @@
 const words = ["citronjuice", "marsipan", "mammut", "maskros", "kossa", "lövblåsare", "nyponbuske"];
 let gamePlay = false;
+const head = document.getElementById("head");
+const body = document.getElementById("body");
+const arms = document.getElementById("arms");
+const legs = document.getElementById("legs");
+const scaffold = document.getElementById("scaffold");
+
+
 const button = document.querySelector(".start-btn");
 button.addEventListener("click", (e) => {
   e.target.classList.add("hideButton");
@@ -11,21 +18,32 @@ button.addEventListener("click", (e) => {
     console.log(spliceWord[i]);
     let wordArray = spliceWord[i].map((item) => item);
     console.log(wordArray);
-   
+
     wordArray.forEach((letter) => {
-     
-     const letters = document.querySelector("letters")
-     
-  const container = document.createElement("div");
-  container.classList.add(box);
-   letters.insertAdjacentHTML("beforebegin", container)
-    const box = document.querySelector(".box");
-       const l = document.createElement("p");
-      l.innerText = string;
-      box.insertAdjacentHTML("beforebegin", l);
-    } )
-    console.log(l);
+      const newWordString = wordsToHtml(letter, letter.length - 1);
+      let letters = document.querySelector(".letters");
+      letters.insertAdjacentHTML("beforeend", newWordString);
+    });
+    window.addEventListener("keydown", function (e) {
+      console.log(e.key);
+      const keys = document.querySelector(".keys");
+      keys.insertAdjacentText("beforebegin", e.key);
+      const letterList = document.querySelectorAll(".letter");
+      letterList.forEach((l) => {
+        if (l.includes(e.key)) {
+          legs.style.fill = "black";
+          l.classList.add("displayLetter");
+        }
+      });
+    });
 
     break;
   }
 });
+function wordsToHtml(wordArray, index) {
+  return `
+    <div class="letterContainer"> 
+        <p class="letter"> ${wordArray[index]}</p>
+    </div> 
+    `;
+}
