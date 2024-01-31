@@ -36,6 +36,8 @@ body {
   display: none;
 }
 .displayLetter {
-    display: block;
+  display: block;
 }
-
+.appear {
+  fill: "black";
+}
