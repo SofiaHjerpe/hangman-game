@@ -90,4 +90,4 @@ function updatePictureAfterGuess(wrongGuessCount) {
     imgParts[5].style.fill = "black";
   }
 }
-// letter.textContent.trim() === e.key ? (letter.style.display = "block") : null;
+
