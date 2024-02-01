@@ -9,6 +9,7 @@ const ground = document.getElementById("ground");
 const legs = document.getElementById("legs");
 const scaffold = document.getElementById("scaffold");
 const overlay = document.querySelector(".overlay");
+const images = document.querySelectorAll("path");
 
 const imgParts = [head, arms, legs, ground, body, scaffold];
 const words = ["citronjuice", "marsipan", "mammut", "maskros", "ko", "lövblåsare", "nyponbuske"];
@@ -38,7 +39,13 @@ function addSecretWordToDom(secretWordArray) {
 }
 
 button.addEventListener("click", (e) => {
+  images.forEach((image) => {
+    image.style.fill = "#eee";
+  });
+  usedLetters.innerHTML = `<div> </div>`;
   e.target.classList.add("hideButton");
+  wrongGuessCount = 0;
+  correctGuessCount = 0;
   const secretWord = getRandomWordFromArray(words);
   const secretWordArray = secretWord.split("");
   console.log(secretWordArray);
@@ -47,7 +54,6 @@ button.addEventListener("click", (e) => {
 });
 
 function letterCheck(e) {
-  console.log(e.key);
   usedLetters.insertAdjacentText("beforeend", e.key);
   const secretWord = Array.from(document.querySelectorAll(".letter"));
   let isGuessCorrect = false;
@@ -67,14 +73,21 @@ function letterCheck(e) {
   }
 
   if (secretWord.length === correctGuessCount) {
-    window.alert("You won the game!");
     button.classList.remove("hideButton");
     button.innerText = "Try Again";
-    
+    usedLetters.innerHTML = `<div> <h1>Congratulations!!! You won!!</h1> </div>`;
   }
 }
 
 function updatePictureAfterGuess(wrongGuessCount) {
+  if (wrongGuessCount === 0) {
+    imgParts[3].style.fillOpacity = "0.2";
+    imgParts[0].style.fill = "#eee";
+    imgParts[1].style.fill = "#eee";
+    imgParts[2].style.fill = "#eee";
+    imgParts[4].style.fill = "#eee";
+    imgParts[5].style.fill = "#eee";
+  }
   if (wrongGuessCount === 1) {
     imgParts[3].style.fillOpacity = "1";
   }
@@ -92,6 +105,8 @@ function updatePictureAfterGuess(wrongGuessCount) {
   }
   if (wrongGuessCount === 6) {
     imgParts[4].style.fill = "black";
-    window.alert("Game over :(");
+    button.classList.remove("hideButton");
+    button.innerText = "Try Again";
+    usedLetters.innerHTML = `<div> <h1>Game over! :(</h1> </div>`;
   }
 }
