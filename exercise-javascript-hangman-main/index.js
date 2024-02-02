@@ -1,4 +1,5 @@
 const button = document.querySelector(".start-btn");
+const tryBtn = document.querySelector(".try-btn");
 const usedLettersElement = document.querySelector(".used-letters");
 const letters = document.querySelector(".letters");
 const letterContainer = document.querySelector(".letterContainer");
@@ -51,10 +52,10 @@ button.addEventListener("click", (e) => {
   const secretWordArray = secretWord.split("");
   console.log(secretWordArray);
   addSecretWordToDom(secretWordArray);
-  window.addEventListener("keydown", (e) => letterCheck(e, secretWordArray, usedLetters));
+  window.addEventListener("keydown", (e) => letterCheck(e, usedLetters));
 });
 
-function letterCheck(e, secretWordArray, usedLetters) {
+function letterCheck(e, usedLetters) {
   let isGuessCorrect = false;
 
   if (usedLetters.includes(e.key)) {
@@ -75,17 +76,16 @@ function letterCheck(e, secretWordArray, usedLetters) {
 
   if (!isGuessCorrect) {
     wrongGuessCount++;
-    updatePictureAfterGuess(wrongGuessCount);
+    updatePictureAfterGuess( wrongGuessCount);
     usedLettersElement.insertAdjacentText("beforeend", e.key);
   }
 
   if (secretWord.length === correctGuessCount) {
-    button.classList.remove("hideButton");
-    button.innerText = "Try Again";
+    tryBtn.classList.remove("hideButton");
     usedLettersElement.innerHTML = `<div> <h1>Congratulations!!! You won!!</h1> </div>`;
-    usedLetters = [];
   }
 }
+
 
 function updatePictureAfterGuess(wrongGuessCount) {
   if (wrongGuessCount === 0) {
@@ -113,9 +113,7 @@ function updatePictureAfterGuess(wrongGuessCount) {
   }
   if (wrongGuessCount === 6) {
     imgParts[4].style.fill = "black";
-    button.classList.remove("hideButton");
-    button.innerText = "Try Again";
+    tryBtn.classList.remove("hideButton");
     usedLettersElement.innerHTML = `<div> <h1>Game over! :(</h1> </div>`;
-    usedLetters = [];
   }
 }
