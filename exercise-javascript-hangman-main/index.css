@@ -39,9 +39,3 @@ body {
   font-size: 60px;
   display: none;
 }
-.displayLetter {
-  display: block;
-}
-.appear {
-  fill: "black";
-}

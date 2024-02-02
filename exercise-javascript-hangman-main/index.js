@@ -1,5 +1,5 @@
 const button = document.querySelector(".start-btn");
-const usedLetters = document.querySelector(".used-letters");
+const usedLettersElement = document.querySelector(".used-letters");
 const letters = document.querySelector(".letters");
 const letterContainer = document.querySelector(".letterContainer");
 const letter = document.querySelector(".letter");
@@ -11,6 +11,7 @@ const scaffold = document.getElementById("scaffold");
 const overlay = document.querySelector(".overlay");
 const images = document.querySelectorAll("path");
 
+const usedLetters = [];
 const imgParts = [head, arms, legs, ground, body, scaffold];
 const words = ["citronjuice", "marsipan", "mammut", "maskros", "ko", "lövblåsare", "nyponbuske"];
 
@@ -42,7 +43,7 @@ button.addEventListener("click", (e) => {
   images.forEach((image) => {
     image.style.fill = "#eee";
   });
-  usedLetters.innerHTML = `<div> </div>`;
+  usedLettersElement.innerHTML = ` `;
   e.target.classList.add("hideButton");
   wrongGuessCount = 0;
   correctGuessCount = 0;
@@ -50,32 +51,39 @@ button.addEventListener("click", (e) => {
   const secretWordArray = secretWord.split("");
   console.log(secretWordArray);
   addSecretWordToDom(secretWordArray);
-  window.addEventListener("keydown", letterCheck);
+  window.addEventListener("keydown", (e) => letterCheck(e, secretWordArray, usedLetters));
 });
 
-function letterCheck(e) {
-  usedLetters.insertAdjacentText("beforeend", e.key);
-  const secretWord = Array.from(document.querySelectorAll(".letter"));
+function letterCheck(e, secretWordArray, usedLetters) {
   let isGuessCorrect = false;
 
+  if (usedLetters.includes(e.key)) {
+    return;
+  }
+  usedLetters.push(e.key);
+  const secretWord = document.querySelectorAll(".letter");
   secretWord.forEach((secretLetter) => {
-    console.log(secretLetter.textContent);
+    console.log(secretLetter);
     console.log(e.key);
     if (secretLetter.textContent === e.key) {
       secretLetter.style.display = "block";
       isGuessCorrect = true;
       correctGuessCount++;
+      usedLettersElement.insertAdjacentText("beforeend", e.key);
     }
   });
+
   if (!isGuessCorrect) {
     wrongGuessCount++;
     updatePictureAfterGuess(wrongGuessCount);
+    usedLettersElement.insertAdjacentText("beforeend", e.key);
   }
 
   if (secretWord.length === correctGuessCount) {
     button.classList.remove("hideButton");
     button.innerText = "Try Again";
-    usedLetters.innerHTML = `<div> <h1>Congratulations!!! You won!!</h1> </div>`;
+    usedLettersElement.innerHTML = `<div> <h1>Congratulations!!! You won!!</h1> </div>`;
+    usedLetters = [];
   }
 }
 
@@ -107,6 +115,7 @@ function updatePictureAfterGuess(wrongGuessCount) {
     imgParts[4].style.fill = "black";
     button.classList.remove("hideButton");
     button.innerText = "Try Again";
-    usedLetters.innerHTML = `<div> <h1>Game over! :(</h1> </div>`;
+    usedLettersElement.innerHTML = `<div> <h1>Game over! :(</h1> </div>`;
+    usedLetters = [];
   }
 }
